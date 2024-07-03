@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image, Button, TouchableOpacity, FlatList, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList, Alert} from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const products = [
@@ -8,6 +7,10 @@ const products = [
     { id: '2', title: 'Black', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress2.png') },
     { id: '3', title: 'Church Wear', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress3.png') },
     { id: '4', title: 'Lamerei', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress4.png') },
+    { id: '5', title: '21WN', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress5.png') },
+    { id: '6', title: 'Lopo', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress6.png') },
+    { id: '7', title: '21WN', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress7.png') },
+    { id: '8', title: 'Lame', description: 'reversible angora cardigan', price: 120, image: require('../assets/images/dress3.png') },
 ];
 
 export default function HomeScreen({ navigation }) {
@@ -16,7 +19,7 @@ export default function HomeScreen({ navigation }) {
             const cart = JSON.parse(await AsyncStorage.getItem('cart')) || [];
             cart.push(product);
             await AsyncStorage.setItem('cart', JSON.stringify(cart));
-            Alert.alert('Added to Cart', `${product.title} has been added to your cart.`);
+            Alert.alert('Success', 'Product added to cart');
         } catch (error) {
             console.error(error);
         }
@@ -25,12 +28,12 @@ export default function HomeScreen({ navigation }) {
     const renderProduct = ({ item }) => (
         <View style={styles.productContainer}>
             <Image source={item.image} style={styles.productImage} />
-            <Text style={styles.productTitle}>{item.title}</Text>
-            <Text style={styles.productDescription}>{item.description}</Text>
-            <Text style={styles.productPrice}>${item.price}</Text>
             <TouchableOpacity onPress={() => addToCart(item)}>
                 <Image source={require('../assets/images/add_circle.png')} style={styles.plusIcon} />
             </TouchableOpacity>
+            <Text style={styles.productTitle}>{item.title}</Text>
+            <Text style={styles.productDescription}>{item.description}</Text>
+            <Text style={styles.productPrice}>${item.price}</Text>
         </View>
     );
 
@@ -46,6 +49,13 @@ export default function HomeScreen({ navigation }) {
                     <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
                         <Image source={require('../assets/images/shoppingBag.png')} style={styles.icon} />
                     </TouchableOpacity>
+                </View>
+            </View>
+            <View style = {styles.headerContainer}>
+                <Text style = {styles.text}>OUR STORY</Text>
+                <View style ={styles.iconContainer}>
+                    <Image source={require('../assets/images/Listview.png')} style={styles.icon} />
+                    <Image source={require('../assets/images/Filter.png')} style={styles.icon} />
                 </View>
             </View>
             <FlatList
@@ -81,6 +91,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    text: {
+        fontSize: 20,
+        letterSpacing: 7,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
     iconContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -92,7 +108,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         paddingHorizontal: 10,
-        paddingTop: 20,
+        paddingTop: 10,
     },
     productContainer: {
         flex: 1,
@@ -100,7 +116,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 10,
         borderRadius: 10,
-        alignItems: 'center',
         position: 'relative',
     },
     productImage: {
@@ -126,8 +141,7 @@ const styles = StyleSheet.create({
     plusIcon: {
         width: 24,
         height: 24,
-        position: 'absolute',
-        bottom: 10,
-        right: 10,
+        left: 120,
+        bottom: 30
     },
 });

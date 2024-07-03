@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity, FlatList, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CartScreen() {
@@ -23,7 +23,7 @@ export default function CartScreen() {
             cart = cart.filter(item => item.id !== productId);
             await AsyncStorage.setItem('cart', JSON.stringify(cart));
             setCartItems(cart);
-            Alert.alert('Removed from Cart', 'Item has been removed from your cart.');
+            Alert.alert('Success', 'Product removed from cart');
         } catch (error) {
             console.error(error);
         }
@@ -39,8 +39,9 @@ export default function CartScreen() {
             <View style={styles.cartItemDetails}>
                 <Text style={styles.cartItemTitle}>{item.title}</Text>
                 <Text style={styles.cartItemPrice}>${item.price}</Text>
-                <TouchableOpacity onPress={() => removeFromCart(item.id)}>
-                    <Text style={styles.removeButton}>Remove</Text>
+                <Text style={styles.productDescription}>{item.description}</Text>
+                <TouchableOpacity onPress={() => removeFromCart(item.id)} style = {{alignItems: 'flex-end'}}>
+                    <Image source={require('../assets/images/remove.png')} style = {styles.removeImage}/>
                 </TouchableOpacity>
             </View>
         </View>
@@ -65,8 +66,10 @@ export default function CartScreen() {
                 contentContainerStyle={styles.cartList}
             />
             <View style={styles.totalContainer}>
+                <Text style = {styles.text2}>EST. TOTAL</Text>
                 <Text style={styles.totalText}>Total: ${getTotalPrice()}</Text>
             </View>
+            
         </View>
     );
 }
@@ -100,6 +103,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
+    text2: {
+        fontSize: 20,
+    },
     lineContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -119,19 +125,20 @@ const styles = StyleSheet.create({
     },
     cartList: {
         paddingVertical: 20,
+        marginTop: 10
     },
     cartItemContainer: {
         flexDirection: 'row',
         marginBottom: 20,
     },
     cartItemImage: {
-        width: 100,
-        height: 100,
-        resizeMode: 'cover',
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
     },
     cartItemDetails: {
         flex: 1,
-        marginLeft: 10,
+        marginLeft: 5,
         justifyContent: 'center',
     },
     cartItemTitle: {
@@ -143,16 +150,25 @@ const styles = StyleSheet.create({
         color: '#f00',
         marginVertical: 5,
     },
-    removeButton: {
-        color: '#ff0000',
-        marginTop: 5,
+    removeImage: {
+        width: 20,
+        height: 20,
+        top: 37,
     },
     totalContainer: {
-        marginTop: 20,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
         alignItems: 'center',
     },
     totalText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
     },
+    productDescription: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 5,
+    }
 });
